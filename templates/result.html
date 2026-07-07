@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Results - Crop Yield Prediction{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gauge-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+    .gauge-value {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #198754;
+    }
+    .gauge-label {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    .recommendation-card {
+        border-left: 4px solid #198754;
+        margin-bottom: 0.5rem;
+    }
+    .recommendation-card.high {
+        border-left-color: #dc3545;
+    }
+    .recommendation-card.medium {
+        border-left-color: #ffc107;
+    }
+    .recommendation-card.low {
+        border-left-color: #198754;
+    }
+    .feature-bar {
+        height: 20px;
+        background: linear-gradient(90deg, #198754, #0d6efd);
+        border-radius: 4px;
+        transition: width 1s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-success">
+                    <i class="fas fa-check-circle"></i> Prediction Results
+                </h2>
+                <p class="text-muted">Field: {{ field_name }}</p>
+            </div>
+
+            <!-- Yield Gauge and Stats -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card shadow-sm h-100 text-center">
+                        <div class="card-body">
+                            <div class="gauge-container">
+                                <svg viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="80" fill="none" 
+                                            stroke="#e9ecef" stroke-width="15"/>
+                                    <circle cx="100" cy="100" r="80" fill="none" 
+                                            stroke="#198754" stroke-width="15"
+                                            stroke-dasharray="{{ (prediction.predicted_yield / 6000 * 100) * 2.51 }} 502.4"
+                                            stroke-linecap="round"/>
+                                </svg>
+                                <div class="gauge-value">
+                                    {{ prediction.predicted_yield|round|int }}
+                                </div>
+                                <div class="gauge-label">kg/ha</div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="badge bg-success fs-6">95% CI</span>
+                                <span class="text-muted">
+                                    {{ prediction.lower_bound|round|int }} – {{ prediction.upper_bound|round|int }} kg/ha
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">
+                                <i class="fas fa-chart-bar text-success"></i> Prediction Summary
+                            </h5>
+                            <div class="row g-3 mt-2">
+                                <div class="col-6">
+                                    <div class="p-3 bg-light rounded">
+                                        <small class="text-muted d-block">Predicted Yield</small>
+                                        <strong class="fs-4">{{ prediction.predicted_yield|round|int }} kg/ha</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 bg-light rounded">
+                                        <small class="text-muted d-block">Confidence Interval</small>
+                                        <strong class="fs-6">
+                                            {{ prediction.lower_bound|round|int }} – {{ prediction.upper_bound|round|int }} kg/ha
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 bg-light rounded">
+                                        <small class="text-muted d-block">Status</small>
+                                        {% if prediction.predicted_yield >= 3500 %}
+                                            <span class="badge bg-success fs-6">Optimal</span>
+                                        {% elif prediction.predicted_yield >= 2500 %}
+                                            <span class="badge bg-warning fs-6">Moderate</span>
+                                        {% else %}
+                                            <span class="badge bg-danger fs-6">Low</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 bg-light rounded">
+                                        <small class="text-muted d-block">Regional Average</small>
+                                        <strong class="fs-6">3,200 kg/ha</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Importance -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-cogs text-success"></i> Key Yield Drivers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% set sorted_importance = prediction.feature_importance.items()|sort(attribute='1', reverse=True) %}
+                        {% for feature, importance in sorted_importance[:5] %}
+                            <div class="col-md-6 mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="small">{{ feature.replace('_', ' ').title() }}</span>
+                                    <span class="small fw-bold">{{ (importance * 100)|round|int }}%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-success" 
+                                         style="width: {{ (importance * 100)|round|int }}%"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-lightbulb text-warning"></i> Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    {% for rec in recommendations %}
+                        <div class="recommendation-card {{ rec.priority }} p-3 mb-2 bg-light rounded">
+                            <div class="d-flex">
+                                {% if rec.priority == 'high' %}
+                                    <i class="fas fa-exclamation-circle text-danger me-2 mt-1"></i>
+                                {% elif rec.priority == 'medium' %}
+                                    <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
+                                {% else %}
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                {% endif %}
+                                <div>
+                                    <strong>{{ rec.title }}</strong>
+                                    <p class="mb-0 small text-muted">{{ rec.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('predict') }}" class="btn btn-outline-success">
+                    <i class="fas fa-arrow-left"></i> New Prediction
+                </a>
+                <a href="{{ url_for('history') }}" class="btn btn-success">
+                    <i class="fas fa-history"></i> View All Predictions
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

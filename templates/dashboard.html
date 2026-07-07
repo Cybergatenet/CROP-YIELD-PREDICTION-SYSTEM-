@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-tachometer-alt text-success"></i> Dashboard
+            </h1>
+            <p class="text-muted">Welcome back, {{ current_user.full_name }}!</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase opacity-75">Total Fields</h6>
+                            <h2 class="fw-bold mb-0">{{ field_count }}</h2>
+                        </div>
+                        <i class="fas fa-map-marked-alt fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase opacity-75">Predictions Made</h6>
+                            <h2 class="fw-bold mb-0">{{ predictions|length if predictions else 0 }}</h2>
+                        </div>
+                        <i class="fas fa-chart-line fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-dark shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase opacity-75">Avg. Yield</h6>
+                            <h2 class="fw-bold mb-0">3,200 <small>kg/ha</small></h2>
+                        </div>
+                        <i class="fas fa-seedling fa-3x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3"><i class="fas fa-bolt text-success"></i> Quick Actions</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('predict') }}" class="btn btn-success">
+                            <i class="fas fa-plus-circle"></i> New Prediction
+                        </a>
+                        <a href="{{ url_for('add_field') }}" class="btn btn-outline-success">
+                            <i class="fas fa-plus"></i> Add Field
+                        </a>
+                        <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-history"></i> View History
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Your Fields -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-map text-success"></i> Your Fields</h5>
+                </div>
+                <div class="card-body">
+                    {% if fields %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Area (ha)</th>
+                                        <th>Soil Type</th>
+                                        <th>Added</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for field in fields %}
+                                        <tr>
+                                            <td><strong>{{ field.field_name }}</strong></td>
+                                            <td>{{ field.area_ha }}</td>
+                                            <td>{{ field.soil_type.replace('_', ' ').title() }}</td>
+                                            <td>{{ field.created_at[:10] }}</td>
+                                            <td>
+                                                <a href="{{ url_for('predict') }}" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-chart-line"></i> Predict
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-map-marked-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">You haven't added any fields yet.</p>
+                            <a href="{{ url_for('add_field') }}" class="btn btn-success">
+                                <i class="fas fa-plus"></i> Add Your First Field
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Predictions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="fas fa-clock text-success"></i> Recent Predictions</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_predictions %}
+                        <div class="list-group">
+                            {% for pred in recent_predictions %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ pred.field_name }}</strong>
+                                        <span class="badge bg-success ms-2">{{ pred.predicted_yield|round|int }} kg/ha</span>
+                                    </div>
+                                    <small class="text-muted">{{ pred.date }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-3">
+                            No predictions yet. 
+                            <a href="{{ url_for('predict') }}">Make your first prediction now!</a>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-6 fw-bold mb-4">
+                <i class="fas fa-cog text-success"></i> Admin Panel
+            </h1>
+            
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-uppercase opacity-75">Users</h6>
+                            <h2 class="fw-bold">{{ user_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-uppercase opacity-75">Fields</h6>
+                            <h2 class="fw-bold">{{ field_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-dark shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-uppercase opacity-75">Predictions</h6>
+                            <h2 class="fw-bold">{{ prediction_count }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white shadow-sm">
+                        <div class="card-body">
+                            <h6 class="text-uppercase opacity-75">Model Status</h6>
+                            <h2 class="fw-bold"><i class="fas fa-check-circle"></i></h2>
+                            <small>Trained</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Actions -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-users text-success"></i> User Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Manage registered users of the system.</p>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-user-plus"></i> Add New User
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-user-edit"></i> Edit User Roles
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-user-times"></i> Deactivate User
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-robot text-success"></i> Model Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Manage the machine learning model.</p>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-sync-alt"></i> Retrain Model
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-upload"></i> Upload New Dataset
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-download"></i> Export Model Metrics
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-database text-success"></i> Data Management</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Manage system data and backups.</p>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-file-export"></i> Export All Data (CSV)
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-file-import"></i> Import Bulk Data
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-database"></i> Backup Database
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0"><i class="fas fa-shield-alt text-success"></i> System Security</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Security settings and logs.</p>
+                            <div class="list-group">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-key"></i> API Keys
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-history"></i> Access Logs
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-shield-virus"></i> Security Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

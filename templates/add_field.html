@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Add Field - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-plus-circle"></i> Add New Field</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('add_field') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.field_name.label(class="form-label fw-bold") }}
+                            {{ form.field_name(class="form-control form-control-lg", placeholder="e.g., Farm A - Plot 1") }}
+                            {% if form.field_name.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.field_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.latitude.label(class="form-label fw-bold") }}
+                                {{ form.latitude(class="form-control", placeholder="e.g., 5.4792") }}
+                                {% if form.latitude.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.latitude.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.longitude.label(class="form-label fw-bold") }}
+                                {{ form.longitude(class="form-control", placeholder="e.g., 7.5430") }}
+                                {% if form.longitude.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.longitude.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.area_ha.label(class="form-label fw-bold") }}
+                                {{ form.area_ha(class="form-control", placeholder="e.g., 2.5") }}
+                                {% if form.area_ha.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.area_ha.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.soil_type.label(class="form-label fw-bold") }}
+                                {{ form.soil_type(class="form-select") }}
+                                {% if form.soil_type.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.soil_type.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-success btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

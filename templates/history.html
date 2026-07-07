@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-6 fw-bold">
+                    <i class="fas fa-history text-success"></i> Prediction History
+                </h1>
+                <a href="{{ url_for('predict') }}" class="btn btn-success">
+                    <i class="fas fa-plus-circle"></i> New Prediction
+                </a>
+            </div>
+
+            {% if predictions %}
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="historyTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Field</th>
+                                        <th>Predicted Yield (kg/ha)</th>
+                                        <th>Confidence Interval</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pred in predictions %}
+                                        <tr>
+                                            <td>{{ pred.date[:16] }}</td>
+                                            <td><strong>{{ pred.field_name }}</strong></td>
+                                            <td>
+                                                <span class="fw-bold">{{ pred.predicted_yield|round|int }}</span>
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">
+                                                    {{ pred.lower_bound|round|int }} – {{ pred.upper_bound|round|int }}
+                                                </small>
+                                            </td>
+                                            <td>
+                                                {% if pred.predicted_yield >= 3500 %}
+                                                    <span class="badge bg-success">Optimal</span>
+                                                {% elif pred.predicted_yield >= 2500 %}
+                                                    <span class="badge bg-warning">Moderate</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Low</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-success" onclick="viewPrediction({{ pred.id }})">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-muted">
+                    <small>Showing {{ predictions|length }} predictions</small>
+                </div>
+            {% else %}
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-chart-line fa-4x text-muted mb-3"></i>
+                        <h5 class="text-muted">No predictions yet</h5>
+                        <p class="text-muted">Start predicting your yields to track your farm's performance.</p>
+                        <a href="{{ url_for('predict') }}" class="btn btn-success">
+                            <i class="fas fa-plus-circle"></i> Make Your First Prediction
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function viewPrediction(predId) {
+    // In production, this would load the specific prediction
+    // For now, redirect to a detailed view
+    alert('Prediction details would be shown here.');
+}
+</script>
+{% endblock %}

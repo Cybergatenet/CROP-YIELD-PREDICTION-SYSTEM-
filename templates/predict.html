@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Yield - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="fas fa-chart-line"></i> Crop Yield Prediction</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        Fill in the details below to get an accurate yield prediction for your maize farm.
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('predict') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Step 1: Field Selection -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-success mb-3">
+                                <span class="badge bg-success me-2">1</span> Select Field
+                            </h6>
+                            <div class="mb-3">
+                                {{ form.field_id.label(class="form-label fw-bold") }}
+                                {{ form.field_id(class="form-select form-select-lg") }}
+                                {% if form.field_id.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in form.field_id.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Crop Management -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-success mb-3">
+                                <span class="badge bg-success me-2">2</span> Crop Management
+                            </h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.variety.label(class="form-label fw-bold") }}
+                                    {{ form.variety(class="form-select") }}
+                                    {% if form.variety.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.variety.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    {{ form.planting_date.label(class="form-label fw-bold") }}
+                                    {{ form.planting_date(class="form-control", type="date") }}
+                                    {% if form.planting_date.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.planting_date.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.fertiliser_type.label(class="form-label fw-bold") }}
+                                    {{ form.fertiliser_type(class="form-select") }}
+                                    {% if form.fertiliser_type.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.fertiliser_type.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    {{ form.fertiliser_rate.label(class="form-label fw-bold") }}
+                                    {{ form.fertiliser_rate(class="form-control", placeholder="e.g., 200") }}
+                                    {% if form.fertiliser_rate.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.fertiliser_rate.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.irrigation_type.label(class="form-label fw-bold") }}
+                                    {{ form.irrigation_type(class="form-select") }}
+                                    {% if form.irrigation_type.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.irrigation_type.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    {{ form.irrigation_frequency.label(class="form-label fw-bold") }}
+                                    {{ form.irrigation_frequency(class="form-control", placeholder="e.g., 5") }}
+                                    {% if form.irrigation_frequency.errors %}
+                                        <div class="text-danger small">
+                                            {% for error in form.irrigation_frequency.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-success btn-lg") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

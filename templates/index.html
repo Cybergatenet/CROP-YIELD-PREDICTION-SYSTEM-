@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Crop Yield Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="row align-items-center py-5">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold text-success">
+                <i class="fas fa-seedling"></i> Smart Farming
+            </h1>
+            <h1 class="display-4 fw-bold mb-4">Crop Yield Prediction</h1>
+            <p class="lead">
+                Predict your maize yields with the power of machine learning.
+                Make informed decisions for better harvests and food security.
+            </p>
+            <div class="mt-4">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('predict') }}" class="btn btn-success btn-lg me-2">
+                        <i class="fas fa-chart-line"></i> Start Prediction
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('register') }}" class="btn btn-success btn-lg me-2">
+                        <i class="fas fa-user-plus"></i> Get Started
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-success btn-lg">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <img src="{{ url_for('static', filename='images/farm-illustration.svg') }}" 
+                 alt="Smart Farming" class="img-fluid" style="max-height: 400px;">
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row py-5 g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h5 class="card-title">Data-Driven Insights</h5>
+                    <p class="card-text text-muted">
+                        Integrate soil, weather, and management data for accurate yield predictions.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h5 class="card-title">Machine Learning</h5>
+                    <p class="card-text text-muted">
+                        Advanced Gradient Boosting algorithms trained on local farm data.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <div class="display-4 text-success mb-3">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h5 class="card-title">Actionable Recommendations</h5>
+                    <p class="card-text text-muted">
+                        Get practical advice to improve your farming practices and yields.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row py-4 bg-light rounded-4">
+        <div class="col-12 text-center mb-4">
+            <h2 class="fw-bold">Impact in Numbers</h2>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <h3 class="display-6 fw-bold text-success">94%</h3>
+            <p class="text-muted">Prediction Accuracy</p>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <h3 class="display-6 fw-bold text-success">350+</h3>
+            <p class="text-muted">Farm Records</p>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <h3 class="display-6 fw-bold text-success">9</h3>
+            <p class="text-muted">Growing Seasons</p>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <h3 class="display-6 fw-bold text-success">8.2%</h3>
+            <p class="text-muted">Mean Error Rate</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
