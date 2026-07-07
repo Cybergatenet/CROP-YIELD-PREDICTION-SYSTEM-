@@ -673,3 +673,8 @@ def internal_server_error(e):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+# if __name__ == '__main__':
+#     # For local development
+#     app.run(debug=True, host='0.0.0.0', port=5000)
+#     # For production on Render, gunicorn will handle running the app
