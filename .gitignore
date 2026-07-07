@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+venv/
+env/
+.venv/
+.env/
+
+# Models (we'll regenerate them)
+models/*.pkl
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database (if using SQLite)
+*.db
+
+# Logs
+*.log
+
+# Misc
+*.tmp
+*.pid
